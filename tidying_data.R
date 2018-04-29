@@ -12,6 +12,14 @@ gdp_per_capita_ppp <- read_excel("data/indicator gapminder gdp_per_capita_ppp.xl
 food_consumption <- read_excel("data/indicator food_consumption.xlsx")
 survivingkids_35 <- read_excel("data/indicator survivingkids 35.xlsx")
 life_expectancy <- read_excel("data/indicator life_expectancy_at_birth.xlsx")
+under_5_mortality <- read_excel("data/indicator gapminder under5mortality.xlsx")
+
+#under_5_mortality[!apply(under_5_mortality == "", 1, all),]
+
+tidy_mortality <- gather(data = under_5_mortality, key = year, value = mortality, 2:217)
+names(tidy_mortality)[1] <- "country"
+tidy_mortality <- dplyr::filter(tidy_mortality, year >= 1960)
+tidy_mortality <- transform(tidy_mortality, year = as.numeric(year))
 
 tidy_fertility <- gather(data = total_fertility, key = year, value = fertility, 2:217)
 names(tidy_fertility)[1] <- "country"
@@ -61,7 +69,8 @@ tidy_data <- dplyr::full_join(tidy_data, tidy_bmi, by=c("country", "year"))
 tidy_final <- dplyr::slice(tidy_data, 1:8460)
 names(tidy_final)[7] <- "surviving_kids_35"
 
-finaldata <- tidy_final
+finaldata <- read_excel("finalwithregion.xlsx")
+
 finaldata <- within(finaldata, Region[is.na(Region) & country == 'Aruba'] <- 'Latin America')
 finaldata <- within(finaldata, Region[is.na(Region) & country == 'Bosnia and Herzegovina'] <- 'Europe & Central Asia')
 finaldata <- subset(finaldata, country!= 'Bosnia-Herzegovina')
@@ -93,5 +102,13 @@ finaldata <- within(finaldata, Region[is.na(Region) & country == 'Samoa'] <- 'Ea
 finaldata <- within(finaldata, Region[is.na(Region) & country == 'Tonga'] <- 'East Asia & Pacific')
 finaldata <- within(finaldata, Region[is.na(Region) & country == 'West Bank and Gaza'] <- 'Europe & Central Asia')
 finaldata <- subset(finaldata, country!= 'West Bank and Gaza')
+finaldata <- within(finaldata, Region[is.na(Region) & country == 'Sao Tome and Principe'] <- 'Sub-Saharan Africa')
 
 finaldata <- select(finaldata, -X)
+
+
+final_data <- merge(finaldata, tidy_mortality, by=c("country", "year"))
+final_data <- final_data[c("country", "year", "fertility", "mortality", "survivingkids_35", "life_expectancy", "agricultural_land", "food_consumption", "bmi", "gdp_per_capita_ppp", "urban_population", "Region")]
+names(final_data)[12] <- "region"
+names(final_data)[10] <- "gdp_per_capita"
+names(final_data)[5] <- "surviving_kids_35"
