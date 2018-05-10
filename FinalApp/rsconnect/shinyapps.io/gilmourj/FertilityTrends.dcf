@@ -1,0 +1,12 @@
+name: FertilityTrends
+title: FertilityTrends
+username:
+account: gilmourj
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 340345
+bundleId: 1365920
+url: https://gilmourj.shinyapps.io/FertilityTrends/
+when: 1525920033.34536
+asMultiple: FALSE
+asStatic: FALSE
