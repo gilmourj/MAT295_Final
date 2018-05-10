@@ -48,6 +48,7 @@ tidy_food <- gather(data = food_consumption, key = year, value = food_consumptio
 names(tidy_food)[1] <- "country"
 tidy_food <- transform(tidy_food, year = as.numeric(year))
 
+
 tidy_surviving_kids <- gather(data = survivingkids_35, key = year, value = survivingkids_35, 2:256)
 names(tidy_surviving_kids)[1] <- "country"
 tidy_surviving_kids <- transform(tidy_surviving_kids, year = as.numeric(year))
@@ -71,44 +72,44 @@ names(tidy_final)[7] <- "surviving_kids_35"
 
 finaldata <- read_excel("finalwithregion.xlsx")
 
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Aruba'] <- 'Latin America')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Bosnia and Herzegovina'] <- 'Europe & Central Asia')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Aruba'] <- 'Latin America')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Bosnia and Herzegovina'] <- 'Europe & Central Asia')
 finaldata <- subset(finaldata, country!= 'Bosnia-Herzegovina')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Cape Verde'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Cape Verde'] <- 'Sub-Saharan Africa')
 finaldata <- subset(finaldata, country!= 'Cayman Islands')
 finaldata <- subset(finaldata, country!= 'Central African Republic')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Channel Islands'] <- 'Europe & Central Asia')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Congo, Dem. Rep.'] <- 'Sub-Saharan Africa')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Congo, Rep.'] <- 'Sub-Saharan Africa')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Cote d\'Ivoire'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Channel Islands'] <- 'Europe & Central Asia')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Congo, Dem. Rep.'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Congo, Rep.'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Cote d\'Ivoire'] <- 'Sub-Saharan Africa')
 finaldata <- subset(finaldata, country!= 'Dominica')
 finaldata <- subset(finaldata, country!= 'Dominican Republic')
 finaldata <- subset(finaldata, country!= 'Falkland Islands')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Guam'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Guam'] <- 'East Asia & Pacific')
 finaldata <- subset(finaldata, country!= 'Hong Kong')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Hong Kong, China'] <- 'East Asia & Pacific')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Macao, China'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Hong Kong, China'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Macao, China'] <- 'East Asia & Pacific')
 finaldata <- subset(finaldata, country!= 'Macau')
 finaldata <- subset(finaldata, country!= 'Macedonia')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Macedonia, FYR'] <- 'Europe & Central Asia')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Macedonia, FYR'] <- 'Europe & Central Asia')
 finaldata <- subset(finaldata, country!= 'Congo (Brazzaville)')
 finaldata <- subset(finaldata, country!= 'Congo (Kinshasa)')
 finaldata <- subset(finaldata, country!= 'Democratic Republic of the Congo')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Mayotte'] <- 'Sub-Saharan Africa')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Micronesia, Fed. Sts.'] <- 'East Asia & Pacific')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Mongolia'] <- 'East Asia & Pacific')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Oman'] <- 'Europe & Central Asia')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Samoa'] <- 'East Asia & Pacific')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Tonga'] <- 'East Asia & Pacific')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'West Bank and Gaza'] <- 'Europe & Central Asia')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Mayotte'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Micronesia, Fed. Sts.'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Mongolia'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Oman'] <- 'Europe & Central Asia')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Samoa'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Tonga'] <- 'East Asia & Pacific')
+finaldata <- within(finaldata, region[is.na(region) & country == 'West Bank and Gaza'] <- 'Europe & Central Asia')
 finaldata <- subset(finaldata, country!= 'West Bank and Gaza')
-finaldata <- within(finaldata, Region[is.na(Region) & country == 'Sao Tome and Principe'] <- 'Sub-Saharan Africa')
+finaldata <- within(finaldata, region[is.na(region) & country == 'Sao Tome and Principe'] <- 'Sub-Saharan Africa')
 
 finaldata <- select(finaldata, -X)
 
 
 final_data <- merge(finaldata, tidy_mortality, by=c("country", "year"))
-final_data <- final_data[c("country", "year", "fertility", "mortality", "survivingkids_35", "life_expectancy", "agricultural_land", "food_consumption", "bmi", "gdp_per_capita_ppp", "urban_population", "Region")]
+final_data <- final_data[c("country", "year", "fertility", "mortality", "survivingkids_35", "life_expectancy", "agricultural_land", "food_consumption", "bmi", "gdp_per_capita_ppp", "urban_population", "region")]
 names(final_data)[12] <- "region"
 names(final_data)[10] <- "gdp_per_capita"
 names(final_data)[5] <- "surviving_kids_35"

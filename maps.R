@@ -14,8 +14,9 @@ finalwithregion <- read_excel("MAT295_Final/finalwithregion.xlsx")
 finaldata <- left_join(finalwithregion, countries, by = "country")
 
 
+
 geom_point(data = finaldata, 
-               aes(x = longitude, y = latitude, size = fertility, color = region))
+           aes(x = longitude, y = latitude, size = fertility, color = region))
 
 library(leaflet)
 
@@ -39,8 +40,8 @@ leaflet(data = finalwithregion) %>%
   addPolygons(color = "red", fillColor = ~pal(fertility), fillOpacity = 0.9)
 
 leaflet(data = finaldata) %>%
- # addTiles(urlTemplate = stamen_tiles,  
-   #        attribution = stamen_attribution) %>%
+  # addTiles(urlTemplate = stamen_tiles,  
+  #        attribution = stamen_attribution) %>%
   setView(0, 0, zoom = 3) %>%
   addPolygons(fillColor = ~pal(countries2[[indicator]]), 
               fillOpacity = 0.8, 
@@ -59,20 +60,34 @@ leaflet() %>%
   addTiles() %>% 
   setView(lng = 10, lat = 50, zoom = 4) %>% 
   addPolygons(data = finaldata,
-                   lat = ~latitude, lng = ~longitude,
-                   fillColor = "yellow")
+              lat = ~latitude, lng = ~longitude,
+              fillColor = "yellow")
 
 # Plots map, coloring each country by the log(Gross Domestic Product)
-ggplot() +
-  geom_polygon(data = finaldata, 
-               aes(x = longitude, y = latitude, group = region, fill = fertility), 
-               color = "black") + 
-  scale_fill_continuous(name="Fertility",limits = c(0,10),
-                        breaks=c(2,4,6), 
-                        low = "white", high = "darkblue")
+
 geom_point(data = finaldata, 
            aes(x = longitude, y = latitude), 
            size = 1, color = "red")
 
-preliminarymap <- left_join(finaldata, data("worldMapEnv"), by = country)
 
+finaldata <- read_excel("currentData.xlsx")
+#df$patients <- ifelse(df$patients==150, 100, ifelse(df$patients==350, 300, NA))
+finaldata$country <- ifelse(finaldata$country=="United States", "United States of America", finaldata$country)
+Worldshapes2 <- read_excel("~/Downloads/Worldshapes2.xlsx")
+Worldshapes2$admin <- ifelse(Worldshapes2$admin=="United Republic of Tanzania", "Tanzania", Worldshapes2$admin)
+
+tidy_shapes <- select(Worldshapes2, long, lat, group, admin)
+names(tidy_shapes)[4] <- "country"
+
+preliminarymap <- inner_join(finaldata, tidy_shapes, by = "country")
+preliminary1 <- select(preliminarymap, long, lat, group, country, fertility, year)
+preliminary <- filter(preliminary1, year == 2007)
+rem <- na.omit(preliminarymap)
+
+ggplot() +
+  geom_polygon(data = preliminary, 
+               aes(x = long, y = lat, group = group, fill = fertility), 
+               color = "black") + 
+  scale_fill_continuous(name="Fertility",limits = c(0,10),
+                        breaks=c(2,4,6,8), 
+                        low = "white", high = "darkblue")
